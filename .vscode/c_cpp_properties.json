@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "browse": {
+                "path" : [
+
+                ]
+            },
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/test/**",
+                "${workspaceFolder}/src/ifu/v0_1/include/**",
+                "${workspaceFolder}/src/ifu/v0_1/src/**",
+                "/usr/lib/systemc-2.3.1/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "8.1",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/cl.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 4
+}
