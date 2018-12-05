@@ -7,8 +7,8 @@ void Address_Manager<xlen>::AddrMngStateTransfer()
      state = IDLE;
    else
    {
-     sc_bit back_pressure = ~(iccm_ready | ibu_ready);
-     switch(current_state)
+     sc_bit back_pressure = ~(iccm_ready.read() | ibu_ready.read());
+     switch(state)
      {
         case(IDLE):
         {
@@ -63,9 +63,38 @@ void  Address_Manager<xlen>::AddrMngOutput()
                     ibu_valid.write(0);
                     address.write(IFU_INIT_PC_VALUE);
                     ready_to_pc_gen(0x0);
+                    break;
                   }
          case VALID:
-                  {
+                  {  
+                    switch((PrevillegeSate)(work_mode_q.read())
+                    {
+                       case USER_MODE:
+                           {
+       
+                              break;
+                           }
+                       case HYPERVISOR_MODE:
+                           {
+
+                              break;
+                           }
+                       case SUPERVISOR_MODE: 
+                           {
+
+                              break;
+                           }
+                       case MACHINE_MODE:
+                           {  
+                              sc_bv[2] valid;
+                              sc_bcp[xlen] pc;
+                              pc = (eu_flush_enable == 1)? flush_pc_q.read() 
+                                                           : pc_q.read();
+                              valid = 
+                              iccm_valid  
+                              break;
+                           }
+                    }
                     iccm_valid.write(0);
                     ibu_valid.write(0);
                     address.write(IFU_INIT_PC_VALUE);
