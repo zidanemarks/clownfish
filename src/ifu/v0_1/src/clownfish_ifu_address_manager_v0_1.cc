@@ -1,4 +1,4 @@
-#include "clownfish_ifu_address_manager_v0_1.hpp"
+#include "clownfish_ifu_address_manager.hpp"
 
 template<int xlen> 
 void Address_Manager<xlen>::AddrMngStateTransfer()
@@ -45,5 +45,41 @@ void Address_Manager<xlen>::AddrMngStateTransfer()
 template<int xlen> 
 void  Address_Manager<xlen>::AddrMngOutput()
 {
+
+   if(reset)
+   {
+      iccm_valid.write(0);
+      ibu_valid.write(0);
+      address.write(IFU_INIT_PC_VALUE);
+      ready_to_pc_gen(0x0);
+   }
+   else
+   {
+      switch(state)
+      {
+         case IDLE:
+                  {
+                    iccm_valid.write(0);
+                    ibu_valid.write(0);
+                    address.write(IFU_INIT_PC_VALUE);
+                    ready_to_pc_gen(0x0);
+                  }
+         case VALID:
+                  {
+                    iccm_valid.write(0);
+                    ibu_valid.write(0);
+                    address.write(IFU_INIT_PC_VALUE);
+                    ready_to_pc_gen(0x0);
+
+                  }
+         case HOLD:
+                  {
+                    iccm_valid.write(0);
+                    ibu_valid.write(0);
+                    address.write(IFU_INIT_PC_VALUE);
+                    ready_to_pc_gen(0x0);
+                  }
+      }
+   }
 
 }
