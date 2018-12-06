@@ -6,7 +6,7 @@
 const uint32_t IFU_INIT_PC_VALUE = 0x8000000;
 // define ICCM size = 128K
 const uint32_t IFU_ICCM_ADDR_START = 0x00000000;
-const uint32_t IFU_ICCM_ADDR_END   = 0x00020000;
+const uint32_t IFU_ICCM_ADDR_END   = 0x00020000-0x4;
 
 //working mode 
 enum <int>{
