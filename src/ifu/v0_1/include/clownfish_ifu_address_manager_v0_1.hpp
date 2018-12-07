@@ -19,18 +19,18 @@ template<int xlen>
 SC_MODULE(Address_Manager)
 {
     // input 
-   sc_in <sc_bit> clk, reset;
-   sc_in <sc_bv <xlen> > pc;
-   sc_in <sc_bit>  valid_from_pcgen;
-   sc_in <sc_bit> iccm_ready, ibu_ready  
-   sc_in <sc_bit> eu_flush_enable;
-   sc_in <sc_bv <xlen> > eu_flush_pc;
-   sc_in <sc_bv <2> > work_mode;
+   sc_in <sc_bit> clk_i, reset_n;
+   sc_in <sc_bv <xlen> > pc_i;
+   sc_in <sc_bit>  valid_from_pcgen_i;
+   sc_in <sc_bit> iccm_ready_i, ibu_ready_i  
+   sc_in <sc_bit> eu_flush_enable_i;
+   sc_in <sc_bv <xlen> > eu_flush_pc_i;
+   sc_in <sc_bv <2> > work_mode_i;
 
    // output
-   sc_out <sc_bit> iccm_valid; ibu_valid;
-   sc_out <sc_bv <xlen> > address;
-   sc_out <sc_bit> ready_to_pcgen;
+   sc_out <sc_bit> iccm_valid_o; ibu_valid_o;
+   sc_out <sc_bv <xlen> > address_o;
+   sc_out <sc_bit> ready_to_pcgen_o;
 
    //inter signals 
    //FSM
@@ -39,7 +39,6 @@ SC_MODULE(Address_Manager)
    //output
    sc_bv[2] valid;
    sc_bv[xlen] pc;
-
 
    void AddrMngStateTransfer();
    void AddMngNextState();
@@ -50,23 +49,22 @@ SC_MODULE(Address_Manager)
    {
        //state transfer sync-logic
        SC_METHOD(AddrMngStateTransfer);
-       sensitive_pos <<clk
-       sensitive_neg <<reset;
+       sensitive_pos <<clk_i
+       sensitive_neg <<reset_n;
 
        //state transfer combine-logic
        SC_METHOD(AddrMngAddMngNextSate);
-       sensitive <<valid_from_pcgen;
-       sensitive <<flush_enable;
-       sensitive <<iccm_ready<<ibu_ready;
+       sensitive <<valid_from_pcgen_i;
+       sensitive <<eu_flush_enable_i;
+       sensitive <<iccm_ready_i<<ibu_ready_i;
        sensitive <<current_state;
 
        SC_METHOD(AddrMngOutput);
-       sensitive_pos <<clk;
-       sensitive_neg <<reset
+       sensitive_pos <<clk_i;
+       sensitive_neg <<reset_n
 
        //SC_METHOD(AddMngDebugThread);
-       //sensitive <<
-
+       //sensitive <}<
    }
 
    ~Address_Manager()
