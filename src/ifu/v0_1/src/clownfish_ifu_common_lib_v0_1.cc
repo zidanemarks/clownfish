@@ -9,10 +9,11 @@ void SRAM<dsize, aisze, msize>::MemoryInit()
     if(memory_array != NULL)
       free(memory_array);
     memory_array = (char *)malloc(sizof(char)*pow(2, msize));
+    state =  ADDRESS_PHASE;
   }
 }
 
-void SRAM<dsize, aisze, msize>::MemoryInit()
+void SRAM<dsize, aisze, msize>::MemoryAccess()
 {
    // prevent memory array not initial 
    valid_o.write(0x0);
@@ -23,6 +24,42 @@ void SRAM<dsize, aisze, msize>::MemoryInit()
    if(!ce_n)
    {
       // write operation
+      switch(state)
+      {
+        case(ADDRESS_PHASE):
+        {
+           if(we_i)
+           {
+               wdata = wdata_i.read();
+               for(uint32 i=0; i<length; i++)
+               {
+                   if(address < pow(2, disize))
+                     memory_array[address] =  wdata.range(8*(i+1), 8*i);
+                   else
+                     printf("INFO : Warnning, address : %x out of range", address);
+                   address++;
+               }
+           }
+           // read operation
+           else
+           {
+               for(uint32 i=0; i<length; i++)
+               {
+                   if(address < pow(2, disize))
+                       rdata.range(8*(i+1), 8*i) = memory_array[address];
+                   else
+                     rdata.range(8*(i+1), 8*i) = 0x00;
+                   address++;
+               }
+
+           }
+
+           state = DATA_PHASE;
+
+        }
+        case(DATA_PHASE):
+
+      }
       if(we_i)
       {
           sc_bv<dsize> wdata;  

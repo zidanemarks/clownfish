@@ -4,6 +4,12 @@
 #include  "math.h"
 #include  "assert.h"
 
+enum <int> {
+   ADDRESS_PHASE = 0,
+   B2B_PHASE,
+   DATA_PHASE
+}  SramState
+
 template<uint32_t dsize, uint32_t asize, uint32_t msize>
 SC_MODULE(SRAM)
 {
@@ -22,19 +28,35 @@ SC_MODULE(SRAM)
 
    //memory
    char * memory_array;
+   sc_signal sc_bv<dsize> wdata;  
+   sc_signal sc_bv<dsize> rdata;
 
    //memroy config 
    char length = dsize/8; 
 
+   //access state
+   SramState state;
+
    //Memory Access Operation
    void MemoryAccess();
+   void MemoryStateTransfer();
+   void MemoryNextSate();
    void MemoryInit();
-   void MemoryState();
 
    SC_CTOR(SRAM)
    { 
       SC_METHOD(MemoryAccess);
-      sensitive_pos<<clk_i;
+      sensitive<<next_state;
+      sensitive_neg<<reset_n;
+      sensitive << ce_n << we_i << address_i << wdata_i;
+
+      SC_METHOD(MemoryStateTransfer);
+      sensitive<<clk_i;
+      sensitive_neg<<reset_n;
+
+      SC_METHOD(MemoryNextState);
+      sensitive<<clk_i;
+      sensitive_neg<<reset_n;
 
       SC_METOHD(MemoryInit);
       sensitive_neg<<reset_n; 

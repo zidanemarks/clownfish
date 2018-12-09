@@ -89,8 +89,8 @@ void  Address_Manager<xlen>::AddrMngOutput()
                   }
          case VALID_MACHINE:
                   {  
-                    pc = (eu_flush_enable_o == 1)? eu_flush_pc_o.read() : pc;
-                    valid = ((pc >= IFU_ICCM_ADDR_START) && (pc<=IFU_ICCM_ADDR_END)) 
+                    pc = (eu_flush_enable_i == 1)? eu_flush_pc_i.read() : pc;
+                    valid = ((pc.read() >= IFU_ICCM_ADDR_START) && (pc.read()<=IFU_ICCM_ADDR_END)) 
                             ? 0x2 : 0x1;
                     iccm_valid_o.write(valid[1]);  
                     ibu_valid_o.write(valid[0]);
