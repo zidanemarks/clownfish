@@ -6,7 +6,6 @@
 
 enum <int> {
    ADDRESS_PHASE = 0,
-   B2B_PHASE,
    DATA_PHASE
 }  SramState
 
@@ -28,14 +27,16 @@ SC_MODULE(SRAM)
 
    //memory
    char * memory_array;
-   sc_signal sc_bv<dsize> wdata;  
-   sc_signal sc_bv<dsize> rdata;
+   sc_signal <sc_bv <asize> > next_address; 
+   sc_signal <sc_bv <dsize> > next_wdata;  
+   sc_signal <sc_bit> next_we;  
+   //sc_signal <sc_bv <dsize> > next_rdata;
 
    //memroy config 
    char length = dsize/8; 
 
    //access state
-   SramState state;
+   SramState current_state, next_state;
 
    //Memory Access Operation
    void MemoryAccess();
@@ -52,7 +53,6 @@ SC_MODULE(SRAM)
 
       SC_METHOD(MemoryStateTransfer);
       sensitive<<clk_i;
-      sensitive_neg<<reset_n;
 
       SC_METHOD(MemoryNextState);
       sensitive<<clk_i;

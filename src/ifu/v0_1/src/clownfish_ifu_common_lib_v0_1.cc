@@ -13,6 +13,66 @@ void SRAM<dsize, aisze, msize>::MemoryInit()
   }
 }
 
+void SRAM<dsize, aisze, msize>::MemoryNextState()
+{
+   if(!reset_n){ 
+     current_state = ADDRESS_PHASE;
+     next_address = 0x0;
+     next_wdata = 0x0;
+     next_we = 0x0;
+
+   }
+   else 
+     current_state = next_state;
+}
+
+void SRAM<dsize, aisze, msize>::MemoryStateTransfer()
+{
+
+  switch(current_state)
+  {
+    case(ADDRESS_PHASE):
+    {
+       if(!ce_n)
+       {
+         if(we_i)
+         {
+           next_wdata = wdata_i.read();
+           next_we = we_i.read();
+         }
+         // read operation
+         else
+            next_we = we_i.read();
+
+         next_address = address_i.read();
+         next_state = DATA_PHASE;
+       }
+    }
+    case(DATA_PHASE):
+    {
+      //B2B phase
+      if(!ce_n)
+      {
+         if(we_i)
+         {
+           next_wdata = wdata_i.read();
+           next_we = we_i.read();
+         }
+         // read operation
+         else
+            next_we = we_i.read();
+
+         next_address = address_i.read();
+         next_state = DATA_PHASE;
+      }
+      //only one transfer
+      else
+        next_state = ADDRESS_PHASE;
+    }
+  }
+
+}
+
 void SRAM<dsize, aisze, msize>::MemoryAccess()
 {
    // prevent memory array not initial 
@@ -51,7 +111,6 @@ void SRAM<dsize, aisze, msize>::MemoryAccess()
                      rdata.range(8*(i+1), 8*i) = 0x00;
                    address++;
                }
-
            }
 
            state = DATA_PHASE;
