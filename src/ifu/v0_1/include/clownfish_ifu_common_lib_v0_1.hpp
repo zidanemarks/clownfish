@@ -27,9 +27,9 @@ SC_MODULE(SRAM)
 
    //memory
    char * memory_array;
-   sc_signal <sc_bv <asize> > next_address; 
-   sc_signal <sc_bv <dsize> > next_wdata;  
-   sc_signal <sc_bit> next_we;  
+   sc_signal <sc_bv <asize> > next_address, current_address; 
+   sc_signal <sc_bv <dsize> > next_wdata, current_wdata;  
+   sc_signal <sc_bit> next_we, current_we;  
    //sc_signal <sc_bv <dsize> > next_rdata;
 
    //memroy config 
@@ -47,12 +47,12 @@ SC_MODULE(SRAM)
    SC_CTOR(SRAM)
    { 
       SC_METHOD(MemoryAccess);
-      sensitive<<next_state;
+      sensitive_pos<<clk_i;
       sensitive_neg<<reset_n;
-      sensitive << ce_n << we_i << address_i << wdata_i;
 
       SC_METHOD(MemoryStateTransfer);
       sensitive<<clk_i;
+      sensitive << ce_n << we_i << address_i << wdata_i;
 
       SC_METHOD(MemoryNextState);
       sensitive<<clk_i;
