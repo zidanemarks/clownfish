@@ -33,7 +33,7 @@ SC_MODULE(SRAM)
    //sc_signal <sc_bv <dsize> > next_rdata;
 
    //memroy config 
-   char length = dsize/8; 
+   const char length = dsize/8; 
 
    //access state
    SramState current_state, next_state;

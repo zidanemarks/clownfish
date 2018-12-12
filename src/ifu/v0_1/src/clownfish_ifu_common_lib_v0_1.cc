@@ -83,10 +83,13 @@ void SRAM<dsize, aisze, msize>::MemoryAccess()
       }
       case(DATA_PHASE):
       {
-         if(next_we)
+         sc_bv<dsize> wdata;  
+         sc_uint address;
+         wdata = current_wdata.read();
+         address = current_address;
+         if(current_we)
          {
-             sc_bv<dsize> wdata;  
-             wdata = wdata.read();
+
              for(uint32 i=0; i<length; i++)
              {
                  if(address < pow(2, disize))
@@ -103,17 +106,25 @@ void SRAM<dsize, aisze, msize>::MemoryAccess()
              for(uint32 i=0; i<length; i++)
              {
                  if(address < pow(2, disize))
-                     wdata.range(8*(i+1), 8*i) = memory_array[address];
+                     rdata.range(8*(i+1), 8*i) = memory_array[address];
                  else
                    wdata.range(8*(i+1), 8*i) = 0x00;
                  address++;
              }
 
          }
+
+         if(!ce_n.read())
+         {
+           next_wdata = wdata_i.read();
+           next_address = address_i.read();
+           next_we = we_i.read();
+         }
+         valid_o.write(0x1);
+         ready_o.write(0x1);
       }
     }
-    valid_o.write(0x1);
-    ready_o.write(0x1);
+
   }
     
 }
