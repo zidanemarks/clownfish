@@ -1,4 +1,4 @@
-#include "clownfish_ifu_hpi.hpp" 
+#include "clownfish_common_hpi.hpp" 
 
 template<int size>
 void  FliFlopBit<size>::proc_ff()

@@ -1,5 +1,5 @@
 #pragma once
-#include  "system.h"
+#include  "systemc.h"
 #include  "stdint.h"
 #include  "math.h"
 #include  "assert.h"
