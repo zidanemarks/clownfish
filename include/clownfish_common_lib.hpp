@@ -48,7 +48,7 @@ SC_MODULE(SRAM)
    { 
       SC_METHOD(MemoryAccess);
       sensitive_pos<<clk_i;
-      sensitive_neg<<reset_n;
+      //sensitive_neg<<reset_n;
 
       SC_METHOD(MemoryStateTransfer);
       sensitive<<clk_i;

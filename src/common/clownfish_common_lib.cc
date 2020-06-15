@@ -1,7 +1,7 @@
 #include "clownfish_ifu_common_lib.hpp"
 
 template<uint32_t dsize, uint32_t asize, uint32_t msize>
-void SRAM<dsize, aisze, msize>::MemoryInit()
+void SRAM<dsize, asize, msize>::MemoryInit()
 {
   if(!reset_n)
   { 
