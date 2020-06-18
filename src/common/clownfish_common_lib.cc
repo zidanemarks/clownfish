@@ -128,3 +128,29 @@ void SRAM<dsize, aisze, msize>::MemoryAccess()
   }
     
 }
+
+
+template<uint32_t depth, uint32_t width, class T>
+void FIFO<depth, width, T>::FIFO_Access(){
+  //read
+  if(we_n){
+    if(fifo_core.num_availale())
+      fifo_core.read(data);
+      data_o = data;
+  }
+  //write
+  else{
+    if(fifo_core.num_free())
+      data = data_i;
+      fifo_core.write(data);
+  }
+  wait(SC_ZERO_TIME);
+  full_o = (fifo_core.num_free() == 0); 
+  empty_o = ~(fifo_core.num_free() == 0); 
+}
+
+template<uint32_t depth, uint32_t width, class T>
+void FIFO<depth, width, T>::FIFO_Init(){
+    fifo_core=sc_fifo(depth);
+}
+

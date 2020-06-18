@@ -93,3 +93,32 @@ SC_MODULE(ClosedCoupledMemory)
    }
 
 }
+
+template<uint32_t depth, uint32_t width, class T>
+SC_MODULE(FIFO){
+   //input
+   sc_in <sc_bv<width> > data_i;
+   sc_in <sc_bit > clk_i;
+   sc_in <sc_bit > reset_n;
+   sc_in <sc_bit> we_n;
+
+   //output
+   sc_out <sc_bv<width> > data_o;
+   sc_out <sc_bit > empty_o;
+   sc_out <sc_bit > full_o;
+   
+   sc_fifo<T> fifo_core;
+   sc_signal <sc_bv<width> > data;
+
+   void FIFO_Access();
+   void FIFO_Init();
+
+   SC_CTOR(FIFO):fifo_core(depth){
+      SC_THREAD(FIFO_Access);
+      sensitive_pos<<clk_i;
+
+      SC_THREAD(FIFO_Init);
+      sensitive_neg<<reset_n;
+   }
+
+}
